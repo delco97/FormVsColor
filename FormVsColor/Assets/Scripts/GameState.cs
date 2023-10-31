@@ -144,13 +144,13 @@ public class GameState {
     protected void FlipPiece(int row, int col) {
         if (IsFormPlayerTurn()) {
             boardState.SetBoxStatus(row, col,
-                formPlayerSelectedPiece == BoxStatus.FORM_BLACK_CROSS
+                boardState.GetBoxStatus(row, col) == BoxStatus.FORM_BLACK_CROSS
                     ? BoxStatus.FORM_WHITE_CIRCLE
                     : BoxStatus.FORM_BLACK_CROSS);
         }
         else {
             boardState.SetBoxStatus(row, col,
-                colorPlayerSelectedPiece == BoxStatus.COLOR_WHITE_CROSS
+                boardState.GetBoxStatus(row, col) == BoxStatus.COLOR_WHITE_CROSS
                     ? BoxStatus.COLOR_BLACK_CIRCLE
                     : BoxStatus.COLOR_WHITE_CROSS);
         }
