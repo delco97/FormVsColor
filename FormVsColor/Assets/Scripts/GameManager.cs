@@ -81,6 +81,8 @@ public class GameManager : MonoBehaviour {
         colorPlayerPieceLeft.GetComponent<TextMeshProUGUI>().text = currentState.GetColorPlayerPiecesLeft().ToString();
         formPlayerTurnIndicator.GetComponent<Image>().enabled = currentState.IsFormPlayerTurn();
         colorPlayerTurnIndicator.GetComponent<Image>().enabled = currentState.IsColorPlayerTurn();
+        colorPlayerPieceIndicator.GetComponent<Box>().SetStatus(currentState.GetColorPlayerSelectedPiece());
+        formPlayerPieceIndicator.GetComponent<Box>().SetStatus(currentState.GetFormPlayerSelectedPiece());
         redo.GetComponent<Button>().interactable = historyManager.RedoIsPossible();
         undo.GetComponent<Button>().interactable = historyManager.UndoIsPossible();
     }
@@ -111,11 +113,13 @@ public class GameManager : MonoBehaviour {
     }
     
     public void HandleUndoButtonClicked() {
-        Debug.Log("Undo button pressed");
+        historyManager.Undo();
+        UpdateUI();
     }
     
     public void HandleRedoButtonClicked() {
-        Debug.Log("Redo button pressed");
+        historyManager.Redo();
+        UpdateUI();
     }
     
     public void HandleMenuButtonClicked() {

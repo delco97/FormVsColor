@@ -39,15 +39,18 @@ public class Board: MonoBehaviour {
         state = state ?? GetStartingState();
         nRows = state.GetRows();
         nCols = state.GetColumns();
+        if(boxes == null || nRows != boxes.GetLength(0) || nCols != boxes.GetLength(1)) {
+            boxes = new GameObject[nRows, nCols];
+        }
         cellWidth = ((RectTransform)container.transform).rect.width / nCols;
         cellHeight = ((RectTransform)container.transform).rect.height / nRows;
-        boxes = new GameObject[state.GetRows(), state.GetColumns()];
         for (int i = 0; i < state.GetRows(); i++) {
             for (int j = 0; j < state.GetColumns(); j++) {
                 BoxStatus boxType = state.GetBoxStatus(i, j);
-                box = GenerateBoardBox(boxType, i, j);
-                box.GetComponent<Box>().SetStatus(boxType);
-                boxes[i, j] = box;
+                if (boxes[i, j] == null) {
+                    boxes[i, j] = GenerateBoardBox(boxType, i, j);
+                }
+                boxes[i, j].GetComponent<Box>().SetStatus(boxType);
             }
         }
     }    

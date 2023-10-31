@@ -80,22 +80,23 @@ public class GameState {
         this.colorPlayerSelectedPiece = colorPlayerSelectedPiece;
     }
 
+    public BoxStatus GetColorPlayerSelectedPiece() {
+        return colorPlayerSelectedPiece;
+    }
+
     public void SetFormPlayerSelectedPiece(BoxStatus formPlayerSelectedPiece) {
         if (!BoxStatusManager.GetFormStatuses().Contains(formPlayerSelectedPiece))
             throw new Exception($"Selected invalid status {formPlayerSelectedPiece} for form player");
         this.formPlayerSelectedPiece = formPlayerSelectedPiece;
     }
+    
+    public BoxStatus GetFormPlayerSelectedPiece() {
+        return formPlayerSelectedPiece;
+    }    
 
 
     public List<Move> GetPossibleMoves() {
         List<Move> possibleMoves = new List<Move>();
-        if (
-            (IsColorPlayerTurn() && GetColorPlayerPiecesLeft() <= 0) ||
-            (IsFormPlayerTurn() && GetFormPlayerPiecesLeft() <= 0)
-        ) {
-            Debug.Log("No pieces left");
-            return possibleMoves;
-        }
 
         List<BoxStatus> allowedBoxTypeClick = new List<BoxStatus>();
         allowedBoxTypeClick.Add(BoxStatus.EMPTY);
