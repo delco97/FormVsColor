@@ -73,19 +73,19 @@ public class GameState {
     public int GetColorPlayerPiecesLeft() {
         return colorPlayerPiecesLeft;
     }
-    
+
     public void SetColorPlayerSelectedPiece(BoxStatus colorPlayerSelectedPiece) {
-        if(!BoxStatusManager.GetColorStatuses().Contains(colorPlayerSelectedPiece))
+        if (!BoxStatusManager.GetColorStatuses().Contains(colorPlayerSelectedPiece))
             throw new Exception($"Selected invalid status {colorPlayerSelectedPiece} for color player");
         this.colorPlayerSelectedPiece = colorPlayerSelectedPiece;
     }
-    
+
     public void SetFormPlayerSelectedPiece(BoxStatus formPlayerSelectedPiece) {
-        if(!BoxStatusManager.GetFormStatuses().Contains(formPlayerSelectedPiece))
+        if (!BoxStatusManager.GetFormStatuses().Contains(formPlayerSelectedPiece))
             throw new Exception($"Selected invalid status {formPlayerSelectedPiece} for form player");
         this.formPlayerSelectedPiece = formPlayerSelectedPiece;
     }
-    
+
 
     public List<Move> GetPossibleMoves() {
         List<Move> possibleMoves = new List<Move>();
@@ -146,24 +146,21 @@ public class GameState {
                 formPlayerSelectedPiece == BoxStatus.FORM_BLACK_CROSS
                     ? BoxStatus.FORM_WHITE_CIRCLE
                     : BoxStatus.FORM_BLACK_CROSS);
-            formPlayerPiecesLeft--;
         }
         else {
             boardState.SetBoxStatus(row, col,
                 colorPlayerSelectedPiece == BoxStatus.COLOR_WHITE_CROSS
                     ? BoxStatus.COLOR_BLACK_CIRCLE
                     : BoxStatus.COLOR_WHITE_CROSS);
-            colorPlayerPiecesLeft--;
         }
     }
 
-    public GameState ApplyMove(GameState gameState, Move move) {
+    public GameState ApplyMove(Move move) {
         if (!IsValidMove(move)) {
-            Debug.Log("Invalid move");
-            return gameState;
+            throw new Exception($"Invalid move {move}");
         }
 
-        GameState nextState = new GameState(gameState);
+        GameState nextState = new GameState(this);
         if (move.moveType == MoveType.ADD) {
             nextState.AddPiece(move.posX, move.posY);
         }
@@ -174,4 +171,15 @@ public class GameState {
         nextState.ChangeTurn();
         return nextState;
     }
+
+    public Move GetMove(int row, int col) {
+        BoardState boardState = GetBoardState();
+        BoxStatus selectedBoxStatus = boardState.GetBoxStatus(row, col);
+
+        if (selectedBoxStatus == BoxStatus.EMPTY) {
+            return new Move(row, col, MoveType.ADD);
+        }
+        return new Move(row, col, MoveType.FLIP);
+    }
+    
 }

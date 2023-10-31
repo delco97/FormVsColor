@@ -95,16 +95,18 @@ public class GameManager : MonoBehaviour {
     
     private BoxStatus GetSelectedColorPlayerPiece() {
         return colorPlayerPieceIndicator.GetComponent<Box>().GetStatus();
-    }    
+    }
 
     public void HandleBoxClicked(int row, int col) {
         print("Box pressed in position: " + row + ", " + col);
         IPlayer currentPlayer = GetCurrentPlayer();
         GameState currentState = historyManager.GetCurrentState();
-        bool isFormPlayerTurn = currentState.IsFormPlayerTurn();
         if (!currentPlayer.HasMoved() && !currentPlayer.IsAI()) {
-            // TODO: Check if move is valid
+            Move requestedMove = currentState.GetMove(row, col);
+            GameState nextState = currentState.ApplyMove(requestedMove);
+            historyManager.AddState(nextState);
             currentPlayer.Play(currentState);
+            UpdateUI();
         }
     }
     
