@@ -11,26 +11,6 @@ public class GameState {
     private BoxStatus colorPlayerSelectedPiece;
 
 
-    public GameState(int nRows, int nCols, bool isFormPlayerTurn, int formPlayerPiecesLeft, int colorPlayerPiecesLeft,
-        BoxStatus formPlayerSelectedPiece, BoxStatus colorPlayerSelectedPiece) {
-        boardState = new BoardState(nRows, nCols);
-        this.isFormPlayerTurn = isFormPlayerTurn;
-        this.formPlayerPiecesLeft = formPlayerPiecesLeft;
-        this.colorPlayerPiecesLeft = colorPlayerPiecesLeft;
-        this.formPlayerSelectedPiece = formPlayerSelectedPiece;
-        this.colorPlayerSelectedPiece = colorPlayerSelectedPiece;
-    }
-
-    public GameState(Board board, bool isFormPlayerTurn, int formPlayerPiecesLeft, int colorPlayerPiecesLeft,
-        BoxStatus formPlayerSelectedPiece, BoxStatus colorPlayerSelectedPiece) {
-        boardState = board.GetCurrentState();
-        this.isFormPlayerTurn = isFormPlayerTurn;
-        this.formPlayerPiecesLeft = formPlayerPiecesLeft;
-        this.colorPlayerPiecesLeft = colorPlayerPiecesLeft;
-        this.formPlayerSelectedPiece = formPlayerSelectedPiece;
-        this.colorPlayerSelectedPiece = colorPlayerSelectedPiece;
-    }
-
     public GameState(BoardState boardState, bool isFormPlayerTurn, int formPlayerPiecesLeft,
         int colorPlayerPiecesLeft, BoxStatus formPlayerSelectedPiece, BoxStatus colorPlayerSelectedPiece) {
         this.boardState = boardState;
@@ -89,10 +69,10 @@ public class GameState {
             throw new Exception($"Selected invalid status {formPlayerSelectedPiece} for form player");
         this.formPlayerSelectedPiece = formPlayerSelectedPiece;
     }
-    
+
     public BoxStatus GetFormPlayerSelectedPiece() {
         return formPlayerSelectedPiece;
-    }    
+    }
 
 
     public List<Move> GetPossibleMoves() {
@@ -108,8 +88,8 @@ public class GameState {
         }
 
         BoardState boardState = GetBoardState();
-        for (int row = 0; row < boardState.GetRows(); row++) {
-            for (int col = 0; col < boardState.GetColumns(); col++) {
+        for (int row = 0; row < boardState.GetSize(); row++) {
+            for (int col = 0; col < boardState.GetSize(); col++) {
                 BoxStatus boxStatus = boardState.GetBoxStatus(row, col);
                 if (allowedBoxTypeClick.Contains(boxStatus)) {
                     if (boxStatus == BoxStatus.EMPTY) {
@@ -180,7 +160,24 @@ public class GameState {
         if (selectedBoxStatus == BoxStatus.EMPTY) {
             return new Move(row, col, MoveType.ADD);
         }
+
         return new Move(row, col, MoveType.FLIP);
     }
-    
+
+    /*private bool FormHasWon() {
+        
+    }
+
+    public bool GetMatchResult() {
+        
+    }*/
+
+    public override string ToString() {
+        return $"GameState: {boardState}\n" +
+               $"IsFormPlayerTurn: {isFormPlayerTurn}\n" +
+               $"FormPlayerPiecesLeft: {formPlayerPiecesLeft}\n" +
+               $"ColorPlayerPiecesLeft: {colorPlayerPiecesLeft}\n" +
+               $"FormPlayerSelectedPiece: {formPlayerSelectedPiece}\n" +
+               $"ColorPlayerSelectedPiece: {colorPlayerSelectedPiece}\n";
+    }
 }

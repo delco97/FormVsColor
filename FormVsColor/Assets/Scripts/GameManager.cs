@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private bool isFormPlayerStarting = true;
     [SerializeField] private int formPlayerStartingPieces = 8;
     [SerializeField] private int colorPlayerStartingPieces = 8;
-    [SerializeField] private int nRows = 4, nCols = 4;
+    [SerializeField] private int boardSize = 4;
 
     // UI elements
     [SerializeField] private GameObject 
@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour {
 
     private void InitializeGame() {
         // Set the first game state 
-        BoardState firstBoardState = new BoardState(nRows, nCols);
+        BoardState firstBoardState = new BoardState(boardSize);
         BoxStatus formPlayerSelectedPiece = GetSelectedFormPlayerPiece();
         BoxStatus colorPlayerSelectedPiece = GetSelectedColorPlayerPiece();
         GameState firstGameState = new GameState(firstBoardState, isFormPlayerStarting, formPlayerStartingPieces, colorPlayerStartingPieces, formPlayerSelectedPiece, colorPlayerSelectedPiece);
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
         formPlayerPieceIndicator.GetComponent<Box>().OnBoxClicked += HandleFormPlayerPieceClicked;
         UpdateUI();
         
-        // TODO: Select player type from settings
+        // TODO: Select player type from match settings
         formPlayer = new HumanPlayer();
         colorPlayer = new HumanPlayer();
     }
