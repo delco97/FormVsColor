@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GameState {
@@ -40,6 +41,10 @@ public class GameState {
 
     public bool IsColorPlayerTurn() {
         return !isFormPlayerTurn;
+    }
+
+    public int GetWinningSequenceLength() {
+        return boardState.GetSize();
     }
 
     public void ChangeTurn() {
@@ -164,13 +169,47 @@ public class GameState {
         return new Move(row, col, MoveType.FLIP);
     }
 
-    /*private bool FormHasWon() {
-        
+    public bool FormPlayerWon() {
+        BoardState boardState = GetBoardState();
+        List<List<BoxPosition>> formCandidateSequencesCross = boardState.GetConsecutiveSequences(
+            new List<BoxStatus> { BoxStatus.FORM_BLACK_CROSS, BoxStatus.COLOR_WHITE_CROSS },
+            GetWinningSequenceLength()
+        );
+        List<List<BoxPosition>> formCandidateSequencesCircle = boardState.GetConsecutiveSequences(
+            new List<BoxStatus> { BoxStatus.FORM_WHITE_CIRCLE, BoxStatus.COLOR_BLACK_CIRCLE },
+            GetWinningSequenceLength()
+        );
+        return formCandidateSequencesCross.Any(seq => seq.Count == GetWinningSequenceLength())
+               || formCandidateSequencesCircle.Any(seq => seq.Count == GetWinningSequenceLength());
     }
 
-    public bool GetMatchResult() {
-        
-    }*/
+    public bool ColorPlayerWon() {
+        BoardState boardState = GetBoardState();
+        List<List<BoxPosition>> colorCandidateSequencesCross = boardState.GetConsecutiveSequences(
+            new List<BoxStatus> { BoxStatus.FORM_BLACK_CROSS, BoxStatus.COLOR_BLACK_CIRCLE },
+            GetWinningSequenceLength()
+        );
+        List<List<BoxPosition>> colorCandidateSequencesCircle = boardState.GetConsecutiveSequences(
+            new List<BoxStatus> { BoxStatus.COLOR_WHITE_CROSS, BoxStatus.FORM_WHITE_CIRCLE },
+            GetWinningSequenceLength()
+        );
+        return colorCandidateSequencesCross.Any(seq => seq.Count == GetWinningSequenceLength())
+               || colorCandidateSequencesCircle.Any(seq => seq.Count == GetWinningSequenceLength());
+    }
+
+
+    public MatchResult GetMatchResult() {
+        if (FormPlayerWon()) {
+            return MatchResult.FORM_WIN;
+        }
+
+        if (ColorPlayerWon()) {
+            return MatchResult.COLOR_WIN;
+        }
+
+        // TODO: check if it's a draw. Define what a draw is.
+        return MatchResult.ONGOING;
+    }
 
     public override string ToString() {
         return $"GameState: {boardState}\n" +

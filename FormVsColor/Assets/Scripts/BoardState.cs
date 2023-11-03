@@ -1,4 +1,8 @@
 using System;
+using System.Collections.Generic;
+using System.Numerics;
+using UnityEngine.Assertions;
+using UnityEngine.UIElements;
 
 public class BoardState {
     private BoxStatus[,] boxes;
@@ -43,11 +47,49 @@ public class BoardState {
         return boxes.GetLength(0);
     }
 
-    /*public List<List<BoxPosition>> GetConsecutiveSequences() {
-        List<List<BoxPosition>> lines = new List<List<BoxPosition>>();
-        for (int row = 0; row < GetSize(); row++) {
-            for (int col = 0; col < GetSize(); col++) {
+    private void HandleCandidateBoxForSequence(List<BoxStatus> targetStatuses, List<BoxPosition> ongoingSequence,
+        List<List<BoxPosition>> sequences, BoxPosition candidateBoxPosition, int? maxSequenceLength = null) {
+        BoxStatus boxStatus = GetBoxStatus(candidateBoxPosition.row, candidateBoxPosition.col);
+        if (targetStatuses.Contains(boxStatus)) {
+            // If the current box status is a target status, then we add it to the ongoing sequence.
+            ongoingSequence.Add(new BoxPosition(candidateBoxPosition.row, candidateBoxPosition.col));
+            if (maxSequenceLength != null && ongoingSequence.Count > maxSequenceLength) {
+                sequences.Add(new List<BoxPosition>(ongoingSequence));
+                ongoingSequence.Clear();
             }
         }
-    }*/
+        else if (ongoingSequence.Count > 0) {
+            // If the current box is NOT in the group, but we have a sequence going on,
+            // then we have reached the end of the sequence
+            sequences.Add(new List<BoxPosition>(ongoingSequence));
+            ongoingSequence.Clear();
+        }
+    }
+
+    public List<List<BoxPosition>> GetConsecutiveSequences(List<BoxStatus> group, int? maxSequenceLength = null) {
+        List<List<BoxPosition>> sequences = new List<List<BoxPosition>>();
+        List<BoxPosition> currentRowSequence = new List<BoxPosition>();
+        List<BoxPosition> currentColSequence = new List<BoxPosition>();
+        List<BoxPosition> currentPrimaryDiagonalSequence = new List<BoxPosition>();
+        List<BoxPosition> currentSecondaryDiagonalSequence = new List<BoxPosition>();
+
+        for (int row = 0; row < GetSize(); row++) {
+            HandleCandidateBoxForSequence(group, currentPrimaryDiagonalSequence, sequences, new BoxPosition(row, row),
+                maxSequenceLength);
+            HandleCandidateBoxForSequence(group, currentSecondaryDiagonalSequence, sequences,
+                new BoxPosition(row, GetSize() - row - 1), maxSequenceLength);
+            for (int col = 0; col < GetSize(); col++) {
+                HandleCandidateBoxForSequence(group, currentRowSequence, sequences, new BoxPosition(row, col),
+                    maxSequenceLength);
+                HandleCandidateBoxForSequence(group, currentColSequence, sequences, new BoxPosition(col, row),
+                    maxSequenceLength);
+            }
+        }
+
+        return sequences;
+    }
+
+    private void AppDomainUnloadedException() {
+        throw new NotImplementedException();
+    }
 }

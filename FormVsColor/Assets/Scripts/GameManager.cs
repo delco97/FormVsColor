@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour {
         formPlayerPieceIndicator.GetComponent<Box>().SetStatus(currentState.GetFormPlayerSelectedPiece());
         redo.GetComponent<Button>().interactable = historyManager.RedoIsPossible();
         undo.GetComponent<Button>().interactable = historyManager.UndoIsPossible();
+        Debug.Log(currentState.GetMatchResult());
     }
     
     private IPlayer GetCurrentPlayer() {
