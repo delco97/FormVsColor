@@ -42,6 +42,10 @@ public class GameState {
     public bool IsColorPlayerTurn() {
         return !isFormPlayerTurn;
     }
+    
+    public bool PreviousPlayerWasFormPlayer() {
+        return !isFormPlayerTurn;
+    }
 
     public int GetWinningSequenceLength() {
         return boardState.GetSize();
@@ -185,27 +189,36 @@ public class GameState {
 
     public bool ColorPlayerWon() {
         BoardState boardState = GetBoardState();
-        List<List<BoxPosition>> colorCandidateSequencesCross = boardState.GetConsecutiveSequences(
+        List<List<BoxPosition>> colorCandidateSequencesBlack = boardState.GetConsecutiveSequences(
             new List<BoxStatus> { BoxStatus.FORM_BLACK_CROSS, BoxStatus.COLOR_BLACK_CIRCLE },
             GetWinningSequenceLength()
         );
-        List<List<BoxPosition>> colorCandidateSequencesCircle = boardState.GetConsecutiveSequences(
+        List<List<BoxPosition>> colorCandidateSequencesWhite = boardState.GetConsecutiveSequences(
             new List<BoxStatus> { BoxStatus.COLOR_WHITE_CROSS, BoxStatus.FORM_WHITE_CIRCLE },
             GetWinningSequenceLength()
         );
-        return colorCandidateSequencesCross.Any(seq => seq.Count == GetWinningSequenceLength())
-               || colorCandidateSequencesCircle.Any(seq => seq.Count == GetWinningSequenceLength());
+        return colorCandidateSequencesBlack.Any(seq => seq.Count == GetWinningSequenceLength())
+               || colorCandidateSequencesWhite.Any(seq => seq.Count == GetWinningSequenceLength());
     }
 
 
     public MatchResult GetMatchResult() {
-        if (FormPlayerWon()) {
+
+        bool formWin = FormPlayerWon();
+        bool colorWin = ColorPlayerWon();
+        if (formWin && colorWin) {
+            // The player who let both players wins is the loser
+            if(PreviousPlayerWasFormPlayer())
+                return MatchResult.COLOR_WIN;
             return MatchResult.FORM_WIN;
         }
 
         if (ColorPlayerWon()) {
             return MatchResult.COLOR_WIN;
         }
+        if (FormPlayerWon()) {
+            return MatchResult.COLOR_WIN;
+        }        
 
         // TODO: check if it's a draw. Define what a draw is.
         return MatchResult.ONGOING;

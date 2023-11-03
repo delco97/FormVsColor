@@ -85,7 +85,20 @@ public class BoardState {
                     maxSequenceLength);
             }
         }
-
+        
+        if(currentRowSequence.Count > 0) {
+            sequences.Add(new List<BoxPosition>(currentRowSequence));
+        }
+        if(currentColSequence.Count > 0) {
+            sequences.Add(new List<BoxPosition>(currentColSequence));
+        }
+        if(currentPrimaryDiagonalSequence.Count > 0) {
+            sequences.Add(new List<BoxPosition>(currentPrimaryDiagonalSequence));
+        }
+        if(currentSecondaryDiagonalSequence.Count > 0) {
+            sequences.Add(new List<BoxPosition>(currentSecondaryDiagonalSequence));
+        }
+        
         return sequences;
     }
 
