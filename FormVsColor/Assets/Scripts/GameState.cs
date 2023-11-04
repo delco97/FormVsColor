@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class GameState {
     private BoardState boardState;
@@ -183,8 +182,8 @@ public class GameState {
             new List<BoxStatus> { BoxStatus.FORM_WHITE_CIRCLE, BoxStatus.COLOR_BLACK_CIRCLE },
             GetWinningSequenceLength()
         );
-        return formCandidateSequencesCross.Any(seq => seq.Count == GetWinningSequenceLength())
-               || formCandidateSequencesCircle.Any(seq => seq.Count == GetWinningSequenceLength());
+        return formCandidateSequencesCross.Exists(seq => seq.Count == GetWinningSequenceLength())
+               || formCandidateSequencesCircle.Exists(seq => seq.Count == GetWinningSequenceLength());
     }
 
     public bool ColorPlayerWon() {
@@ -197,8 +196,8 @@ public class GameState {
             new List<BoxStatus> { BoxStatus.COLOR_WHITE_CROSS, BoxStatus.FORM_WHITE_CIRCLE },
             GetWinningSequenceLength()
         );
-        return colorCandidateSequencesBlack.Any(seq => seq.Count == GetWinningSequenceLength())
-               || colorCandidateSequencesWhite.Any(seq => seq.Count == GetWinningSequenceLength());
+        return colorCandidateSequencesBlack.Exists(seq => seq.Count == GetWinningSequenceLength())
+               || colorCandidateSequencesWhite.Exists(seq => seq.Count == GetWinningSequenceLength());
     }
 
 
@@ -217,7 +216,7 @@ public class GameState {
             return MatchResult.COLOR_WIN;
         }
         if (FormPlayerWon()) {
-            return MatchResult.COLOR_WIN;
+            return MatchResult.FORM_WIN;
         }        
 
         // TODO: check if it's a draw. Define what a draw is.

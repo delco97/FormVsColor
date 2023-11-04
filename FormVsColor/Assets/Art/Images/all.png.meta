@@ -1166,6 +1166,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: all_50
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 732
+        width: 267
+        height: 61
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 27bdd6998324741cc9fd0d6cab20688d
+      internalID: -1407763356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -1223,6 +1244,7 @@ TextureImporter:
       all_48: 1227289027
       all_49: 99766369
       all_5: 657356842
+      all_50: -1407763356
       all_6: 3335900
       all_7: 235605362
       all_8: -1102604627
