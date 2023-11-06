@@ -1,40 +1,41 @@
-using System;
-using JetBrains.Annotations;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { private set; get; }
     private HistoryManager historyManager;
-    
+
     private IPlayer formPlayer;
     private IPlayer colorPlayer;
-    
+
     // Starting game state
     [SerializeField] private bool isFormPlayerStarting = true;
     [SerializeField] private int formPlayerStartingPieces = 8;
     [SerializeField] private int colorPlayerStartingPieces = 8;
     [SerializeField] private int boardSize = 4;
+    private bool isGamePaused;
 
     // UI elements
-    [SerializeField] private GameObject 
+    [SerializeField] private GameObject
         board,
         undo,
         redo,
-        formPlayerPieceLeft, 
+        formPlayerPieceLeft,
         colorPlayerPieceLeft,
         formPlayerPieceIndicator,
         colorPlayerPieceIndicator,
         formPlayerTurnIndicator,
-        colorPlayerTurnIndicator;
+        colorPlayerTurnIndicator,
+        gameMenu;
 
     void Awake() {
         MakeSingleton();
+        // Setup event handlers
+        board.GetComponent<Board>().OnBoxClicked += HandleBoxClicked;                                   
+        colorPlayerPieceIndicator.GetComponent<Box>().OnBoxClicked += HandleColorPlayerPieceClicked;    
+        formPlayerPieceIndicator.GetComponent<Box>().OnBoxClicked += HandleFormPlayerPieceClicked;              
         InitializeGame();
     }
 
@@ -50,32 +51,31 @@ public class GameManager : MonoBehaviour {
 
     private void InitializeGame() {
         // Set the first game state 
+        isGamePaused = false;
+        gameMenu.SetActive(false);
         BoardState firstBoardState = new BoardState(boardSize);
         BoxStatus formPlayerSelectedPiece = GetSelectedFormPlayerPiece();
         BoxStatus colorPlayerSelectedPiece = GetSelectedColorPlayerPiece();
-        GameState firstGameState = new GameState(firstBoardState, isFormPlayerStarting, formPlayerStartingPieces, colorPlayerStartingPieces, formPlayerSelectedPiece, colorPlayerSelectedPiece);
+        GameState firstGameState = new GameState(firstBoardState, isFormPlayerStarting, formPlayerStartingPieces,
+            colorPlayerStartingPieces, formPlayerSelectedPiece, colorPlayerSelectedPiece);
         historyManager = new HistoryManager(firstGameState);
-        board.GetComponent<Board>().OnBoxClicked += HandleBoxClicked;
-        colorPlayerPieceIndicator.GetComponent<Box>().OnBoxClicked += HandleColorPlayerPieceClicked;
-        formPlayerPieceIndicator.GetComponent<Box>().OnBoxClicked += HandleFormPlayerPieceClicked;
-        UpdateUI();
-        
+
         // TODO: Select player type from match settings
         formPlayer = new HumanPlayer();
         colorPlayer = new HumanPlayer();
+        UpdateUI();  
     }
 
     public void Update() {
         /*IPlayer currentPlayer = GetCurrentPlayer();
-        if (!currentPlayer.HasMoved() && currentPlayer.IsAI()) {
+        if (!isGamePaused && !currentPlayer.HasMoved() && currentPlayer.IsAI()) {
             GameState nextState = currentPlayer.Play(historyManager.GetCurrentState());
             historyManager.AddState(nextState);
             UpdateUI();
         }*/
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
+        if (Input.GetKeyDown(KeyCode.Space)) {
             Debug.Log(historyManager.GetCurrentState().GetMatchResult());
-        }        
+        }
     }
 
     private void UpdateUI() {
@@ -91,15 +91,15 @@ public class GameManager : MonoBehaviour {
         undo.GetComponent<Button>().interactable = historyManager.UndoIsPossible();
         Debug.Log(currentState.GetMatchResult());
     }
-    
+
     private IPlayer GetCurrentPlayer() {
         return historyManager.GetCurrentState().IsFormPlayerTurn() ? formPlayer : colorPlayer;
     }
-    
+
     private BoxStatus GetSelectedFormPlayerPiece() {
         return formPlayerPieceIndicator.GetComponent<Box>().GetStatus();
     }
-    
+
     private BoxStatus GetSelectedColorPlayerPiece() {
         return colorPlayerPieceIndicator.GetComponent<Box>().GetStatus();
     }
@@ -107,7 +107,7 @@ public class GameManager : MonoBehaviour {
     public void HandleBoxClicked(int row, int col) {
         IPlayer currentPlayer = GetCurrentPlayer();
         GameState currentState = historyManager.GetCurrentState();
-        if (!currentPlayer.HasMoved() && !currentPlayer.IsAI()) {
+        if (!isGamePaused && !currentPlayer.HasMoved() && !currentPlayer.IsAI()) {
             Move requestedMove = currentState.GetMove(row, col);
             GameState nextState = currentState.ApplyMove(requestedMove);
             historyManager.AddState(nextState);
@@ -115,20 +115,35 @@ public class GameManager : MonoBehaviour {
             UpdateUI();
         }
     }
-    
+
     public void HandleUndoButtonClicked() {
         historyManager.Undo();
         UpdateUI();
     }
-    
+
     public void HandleRedoButtonClicked() {
         historyManager.Redo();
         UpdateUI();
     }
-    
+
     public void HandleMenuButtonClicked() {
-        Debug.Log("Menu button pressed");
+        gameMenu.SetActive(!gameMenu.activeSelf);
+        isGamePaused = true;
     }
+
+    public void HandleResumeButtonClicked() {
+        isGamePaused = false;
+        gameMenu.SetActive(false);
+    }
+
+    public void HandleResetButtonClicked() {
+        InitializeGame();
+    }
+
+    public void HandleHomeButtonClicked() {
+        SceneManager.LoadScene("MainMenu");
+    }
+
 
     public void HandleColorPlayerPieceClicked(int row, int col) {
         GameState nextState = new GameState(historyManager.GetCurrentState());
@@ -136,12 +151,11 @@ public class GameManager : MonoBehaviour {
         nextState.SetColorPlayerSelectedPiece(nextStatus);
         historyManager.AddState(nextState);
     }
-    
+
     public void HandleFormPlayerPieceClicked(int row, int col) {
         GameState nextState = new GameState(historyManager.GetCurrentState());
         BoxStatus nextStatus = formPlayerPieceIndicator.GetComponent<Box>().NextStatus();
         nextState.SetFormPlayerSelectedPiece(nextStatus);
         historyManager.AddState(nextState);
-    }    
-    
+    }
 }
