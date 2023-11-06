@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour {
         colorPlayerPieceIndicator,
         formPlayerTurnIndicator,
         colorPlayerTurnIndicator,
-        gameMenu;
+        gameMenu,
+        endMenu;
 
     void Awake() {
         MakeSingleton();
@@ -89,7 +90,12 @@ public class GameManager : MonoBehaviour {
         formPlayerPieceIndicator.GetComponent<Box>().SetStatus(currentState.GetFormPlayerSelectedPiece());
         redo.GetComponent<Button>().interactable = historyManager.RedoIsPossible();
         undo.GetComponent<Button>().interactable = historyManager.UndoIsPossible();
-        Debug.Log(currentState.GetMatchResult());
+        MatchResult matchResult = currentState.GetMatchResult();
+        if(matchResult != MatchResult.ONGOING) {
+            isGamePaused = true;
+            endMenu.SetActive(true);
+            endMenu.GetComponent<EndMenu>().Initialize(matchResult);
+        }
     }
 
     private IPlayer GetCurrentPlayer() {
@@ -127,8 +133,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void HandleMenuButtonClicked() {
+        isGamePaused = true;           
         gameMenu.SetActive(!gameMenu.activeSelf);
-        isGamePaused = true;
     }
 
     public void HandleResumeButtonClicked() {
