@@ -68,14 +68,11 @@ public class GameManager : MonoBehaviour {
     }
 
     public void Update() {
-        /*IPlayer currentPlayer = GetCurrentPlayer();
+        IPlayer currentPlayer = GetCurrentPlayer();
         if (!isGamePaused && !currentPlayer.HasMoved() && currentPlayer.IsAI()) {
             GameState nextState = currentPlayer.Play(historyManager.GetCurrentState());
             historyManager.AddState(nextState);
             UpdateUI();
-        }*/
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log(historyManager.GetCurrentState().GetMatchResult());
         }
     }
 
@@ -133,8 +130,8 @@ public class GameManager : MonoBehaviour {
     }
 
     public void HandleMenuButtonClicked() {
-        isGamePaused = true;           
         gameMenu.SetActive(!gameMenu.activeSelf);
+        isGamePaused = gameMenu.activeSelf;
     }
 
     public void HandleResumeButtonClicked() {

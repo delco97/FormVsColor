@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum BoxStatus {
-    EMPTY,
-    FORM_BLACK_CROSS,
-    FORM_WHITE_CIRCLE,
-    COLOR_WHITE_CROSS,
-    COLOR_BLACK_CIRCLE
+    EMPTY, // 0
+    FORM_BLACK_CROSS, // 1
+    FORM_WHITE_CIRCLE, // 2
+    COLOR_WHITE_CROSS, // 3
+    COLOR_BLACK_CIRCLE // 4
 }
 
 public static class BoxStatusManager {
