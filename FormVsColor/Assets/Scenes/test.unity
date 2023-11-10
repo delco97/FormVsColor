@@ -350,8 +350,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1391050962}
   - {fileID: 520026966}
+  - {fileID: 1391050962}
   - {fileID: 506146688}
   - {fileID: 924218048}
   - {fileID: 1149975518}
@@ -401,7 +401,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.2, y: -439}
+  m_AnchoredPosition: {x: -121, y: -360}
   m_SizeDelta: {x: 225.6, y: 42.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &397585644
@@ -450,7 +450,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 520026968}
         m_TargetAssemblyTypeName: Box, Assembly-CSharp
-        m_MethodName: SetColorWhiteCross
+        m_MethodName: SetColorBlackCircle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -535,7 +535,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.2, y: -275.15}
+  m_AnchoredPosition: {x: -121, y: -196.14998}
   m_SizeDelta: {x: 225.6, y: 42.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &506146689
@@ -711,12 +711,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 520026964}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 80.64, y: -62.399998, z: 0}
+  m_LocalPosition: {x: 3, y: 43, z: 0}
   m_LocalScale: {x: 172.79294, y: 172.79294, z: 172.79294}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 360179193}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &520026967
 Animator:
@@ -753,13 +753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentStatus: 0
   allowedStatuses: 0000000001000000020000000300000004000000
-  empty: {fileID: 415490134, guid: 218cc30dce7854f3382e97241a07c7b7, type: 3}
-  fromBlackCross: {fileID: 788691525, guid: 218cc30dce7854f3382e97241a07c7b7, type: 3}
-  formWhiteCircle: {fileID: -588576712, guid: 218cc30dce7854f3382e97241a07c7b7, type: 3}
-  colorWhiteCross: {fileID: 985520504, guid: 218cc30dce7854f3382e97241a07c7b7, type: 3}
-  colorBlackCircle: {fileID: -563754580, guid: 218cc30dce7854f3382e97241a07c7b7, type: 3}
   animator: {fileID: 520026967}
-  renderer: {fileID: 520026965}
 --- !u!1 &851256028
 GameObject:
   m_ObjectHideFlags: 0
@@ -932,7 +926,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.2, y: -329}
+  m_AnchoredPosition: {x: -121, y: -249.99998}
   m_SizeDelta: {x: 225.6, y: 42.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &924218049
@@ -1150,7 +1144,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.2, y: -384}
+  m_AnchoredPosition: {x: -121, y: -305}
   m_SizeDelta: {x: 225.6, y: 42.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1149975519
@@ -1348,11 +1342,11 @@ RectTransform:
   m_Children:
   - {fileID: 1712215607}
   m_Father: {fileID: 360179193}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.2, y: -220.21}
+  m_AnchoredPosition: {x: -121, y: -141.20999}
   m_SizeDelta: {x: 225.6, y: 40.42}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1391050963
