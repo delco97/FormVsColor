@@ -14,10 +14,9 @@ public class Board: MonoBehaviour {
         GameObject go = Instantiate(box, container.transform);
         go.name = $"Box ({row}, {col})";
         
-        Rect rect = ((RectTransform)go.transform).rect;
-        rect.width = cellWidth;
-        rect.height = cellHeight;
-        
+        float xScalingFactor = cellWidth;
+        float yScalingFactor = cellHeight;
+        go.transform.localScale = new Vector3(xScalingFactor, yScalingFactor, go.transform.localScale.z);
         Box boxScript = go.GetComponent<Box>();
         boxScript.Initialize(row, col);
         boxScript.OnBoxClicked += HandleBoxClicked;
@@ -25,12 +24,12 @@ public class Board: MonoBehaviour {
         row = boardSize - row - 1;
         float boardWidth = ((RectTransform)container.transform).rect.width;
         float boardHeight = ((RectTransform)container.transform).rect.height;
-        go.transform.localPosition = new Vector2((col * cellWidth) - (boardWidth / 2) + cellWidth / 2,
-            (row * cellHeight) - (boardHeight / 2) + cellHeight / 2);
+        go.transform.localPosition = new Vector3((col * cellWidth) - (boardWidth / 2) + cellWidth / 2,
+            (row * cellHeight) - (boardHeight / 2) + cellHeight / 2, -1);
         
         return go;
     }
-    
+
     private BoardState GetStartingState() {
         return new BoardState(boardSize);
     }

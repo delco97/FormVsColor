@@ -24,11 +24,11 @@ public class Box : MonoBehaviour {
 
     public event BoxClickedEventHandler OnBoxClicked;
 
-    public virtual void OnClick() {
+    public void OnMouseDown() {
         OnBoxClicked?.Invoke(row, col);
+        print("CIAO");
     }
-
-
+    
     public void Initialize(int row, int col) {
         this.row = row;
         this.col = col;
@@ -43,8 +43,6 @@ public class Box : MonoBehaviour {
         if (Array.IndexOf(allowedStatuses, nextStatus) == -1) {
             throw new ArgumentException("nextStatus is not in allowedStatuses");
         }
-
-        if (GetStatus() == nextStatus) return;
         animator.Play(GetAnimationName(GetStatus(), nextStatus));
         currentStatus = Array.IndexOf(allowedStatuses, nextStatus);
     }
